@@ -73,8 +73,8 @@ static void OnDataRecv(const uint8_t *mac_addr, const uint8_t *data, int len) {
     data_received = true;
     wrx_len = len;
     //...
-    send_slip_tag("ESP_NOW_CB");
-    send_slip((uint8_t*)mac_addr, 6);
-    send_slip((uint8_t*)data, len);
-    end_slip();
+    serial_send_slip_tag("ESP_NOW_CB");
+    serial_send_slip((uint8_t*)mac_addr, 6);
+    serial_send_slip((uint8_t*)data, len);
+    serial_end_slip();
 }

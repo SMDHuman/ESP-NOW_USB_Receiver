@@ -14,18 +14,14 @@
 
 #define CHECKSUM_ENABLE
 
-#define slip_buffer_size 2048
+#define SLIP_BUFFER_SIZE 2048
 
 //-----------------------------------------------------------------------------
-extern uint8_t slip_package_buffer[];
-extern size_t slip_buffer_index;
-extern uint8_t slip_package_ready; 
-
-//-----------------------------------------------------------------------------
-void slip_init(size_t buffer_size = 2048);
+void slip_init();
 void slip_task();
 void slip_push(uint8_t data);
 uint8_t slip_is_ready();
+void slip_get_package(uint8_t **buf, size_t *len);
 void slip_reset();
 
 //-----------------------------------------------------------------------------

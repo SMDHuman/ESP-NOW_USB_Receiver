@@ -6,9 +6,9 @@
 #include "utils.h"
 
 
-uint8_t slip_package_buffer[slip_buffer_size] = {};
-size_t slip_buffer_index;
-uint8_t slip_package_ready; 
+static uint8_t slip_package_buffer[SLIP_BUFFER_SIZE] = {};
+static size_t slip_buffer_index;
+static uint8_t slip_package_ready; 
 
 static uint64_t checksum = 0;
 
@@ -24,6 +24,10 @@ void slip_push(uint8_t data){
     static uint8_t esc_flag = false;
     if(slip_package_ready){
         slip_reset();
+    }
+    if(SLIP_BUFFER_SIZE == slip_buffer_index){
+        slip_reset();
+        serial_send_debug("! SLIP BUFFER OVERFLOW !");
     }
     if(esc_flag){
         if(data == S_ESC_END){
@@ -75,9 +79,15 @@ uint8_t slip_is_ready(){
     }
     return(false);
 }
+//-----------------------------------------------------------------------------
+void slip_get_package(uint8_t **buf, size_t *len){
+    *buf = &slip_package_buffer[0];
+    *len = slip_buffer_index;
+}
 
+//-----------------------------------------------------------------------------
 void slip_reset(){
-    memset(slip_package_buffer, 0, slip_buffer_size);
+    memset(slip_package_buffer, 0, SLIP_BUFFER_SIZE);
     slip_buffer_index = 0;
     slip_package_ready = false;
     checksum = 0;

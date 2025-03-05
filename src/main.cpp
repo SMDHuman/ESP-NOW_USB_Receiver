@@ -7,12 +7,13 @@ void led_task();
 
 //-----------------------------------------------------------------------------
 void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  // Initialize the modules
   config_init();
   wrx_init();
   serial_init();
-  pinMode(LED_BUILTIN, OUTPUT);
-  
-  config_set_reset_flag();        // ! Remove this line after first run !
+  //...
+  config_set_reset_flag();
 }
 
 //-----------------------------------------------------------------------------

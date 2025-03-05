@@ -10,7 +10,7 @@ config_t config;
 
 //-----------------------------------------------------------------------------
 void config_init() {
-    prefs.begin("ESPNOW_RX");
+    prefs.begin("ESPNOW_RX", false);  // false = RW mode
     
     // Check if initialized
     if (!prefs.getUChar("initialized", 0)) {

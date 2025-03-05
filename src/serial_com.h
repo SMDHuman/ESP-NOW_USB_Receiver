@@ -22,12 +22,12 @@ enum rx_package_type_e{
 //-----------------------------------------------------------------------------
 void serial_init();
 void serial_task();
-void send_slip(uint8_t* buf, size_t len);
-void send_slip(uint8_t data);
-void send_slip_tag(String data);
-void send_debug(String text);
-void send_debug(int number);
-void end_slip();
+void serial_send_slip_tag(String data);
+void serial_send_slip(uint8_t* buf, size_t len);
+void serial_send_slip(uint8_t data);
+void serial_send_debug(String text);
+void serial_send_debug(int number);
+void serial_end_slip();
 
 //-----------------------------------------------------------------------------
 #endif
