@@ -32,5 +32,5 @@ class SLIP:
 	def get(self) -> bytearray:
 		if(self.ready):
 			self.ready -= 1
-			return(self.packages.pop())
+			return(self.packages.pop(0))
 		return(bytearray())

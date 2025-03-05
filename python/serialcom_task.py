@@ -113,7 +113,7 @@ class SerialCOM:
 					self.receive_cb(pack[:-4])
 			#...
 			elif(self.slip.wait_ack):
-				self.serial.write(bytearray([1]))
+				self.serial.write(self.slip.ESC_END)
 				self.slip.wait_ack = False
 			#...
 			elif(self.serial.is_open):

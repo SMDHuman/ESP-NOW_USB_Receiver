@@ -42,8 +42,7 @@ esp_err_t wrx_init() {
 
 //...
 esp_err_t wrx_send(uint8_t *addrss ,uint8_t *data, uint8_t len) {
-    esp_now_send(addrss, data, len);
-    return ESP_OK;
+    return esp_now_send(addrss, data, len);
 }
 
 //...
@@ -74,7 +73,7 @@ static void OnDataRecv(const uint8_t *mac_addr, const uint8_t *data, int len) {
     data_received = true;
     wrx_len = len;
     //...
-    send_slip("ESP_NOW_CB");
+    send_slip_tag("ESP_NOW_CB");
     send_slip((uint8_t*)mac_addr, 6);
     send_slip((uint8_t*)data, len);
     end_slip();

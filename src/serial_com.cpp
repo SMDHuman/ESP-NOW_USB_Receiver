@@ -49,7 +49,7 @@ void serial_task(){
     }
     // READ_CONFIG - Send the configuration to the sender
     else if(msg_tag == "READ_CONFIG"){
-      send_slip("CONFIG");
+      send_slip_tag("CONFIG");
       uint8_t config_package[sizeof(config_t)];
       memcpy(config_package, &config, sizeof(config_t));
       send_slip(config_package, sizeof(config_t));
@@ -72,7 +72,6 @@ void serial_task(){
     // REMOVE_PEER - Remove a peer from the list [peer_addr]
     else if(msg_tag == "REMOVE_PEER"){
       esp_err_t res = esp_now_del_peer(&slip_package_buffer[msg_start]);
-      end_slip();
       if(res != ESP_OK){
         send_debug("!PEER_NOT_FOUND!");
       }
@@ -84,7 +83,6 @@ void serial_task(){
       esp_err_t res = esp_now_send(peer_addr, 
                                    &slip_package_buffer[msg_start+6], 
                                    slip_buffer_index-msg_start-6);
-      end_slip();
       if(res != ESP_OK){
         send_debug("!SEND_FAIL!");
       }
@@ -94,7 +92,7 @@ void serial_task(){
 }
 //-----------------------------------------------------------------------------
 // Send a string of data using SLIP encoding. Also puts leading zero byte at the end
-void send_slip(String data){
+void send_slip_tag(String data){
   send_slip((uint8_t*)data.c_str(), data.length());
   send_slip(0);
 }
@@ -114,8 +112,14 @@ void send_slip(uint8_t data){
   if(data_count == S_MAX_PACKAGE){
     Serial.write(S_ESC); // ESC+END == ACK
     Serial.write(S_END);
-    while(!Serial.available()); // Wait for ACK
-    Serial.read();
+    // Wait for ACK
+    uint32_t timeout = millis();
+    while(Serial.read() != S_ESC_END){
+      if(millis() - timeout > ACK_TIMEOUT){
+        //send_debug("ACK_TIMEOUT");
+        return;
+      }
+    }
     data_count = 0;
   }
   // Send the data
@@ -149,7 +153,7 @@ void end_slip(){
 //-----------------------------------------------------------------------------
 // Send a debug message as a string using SLIP encoding
 void send_debug(String text){
-  send_slip("DEBUG_STR");
+  send_slip_tag("DEBUG_STR");
   for(size_t i = 0; i < text.length(); i++){
     send_slip(text[i]);
   }

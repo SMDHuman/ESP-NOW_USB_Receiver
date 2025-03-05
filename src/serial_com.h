@@ -10,6 +10,7 @@
 //-----------------------------------------------------------------------------
 #define BAUDRATE config.serial_baudrate
 #define S_MAX_PACKAGE config.serial_tx_package_size
+#define ACK_TIMEOUT config.serial_ack_timeout
 
 //-----------------------------------------------------------------------------
 enum rx_package_type_e{
@@ -23,7 +24,7 @@ void serial_init();
 void serial_task();
 void send_slip(uint8_t* buf, size_t len);
 void send_slip(uint8_t data);
-void send_slip(String data);
+void send_slip_tag(String data);
 void send_debug(String text);
 void send_debug(int number);
 void end_slip();

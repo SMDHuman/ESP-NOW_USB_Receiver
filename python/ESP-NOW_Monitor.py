@@ -15,6 +15,11 @@ def message_received(msg: bytearray):
 
 	if(msg_tag == "DEBUG_STR"):
 		print(f"[{msg_tag}]", msg[msg_start:].decode())
+	elif(msg_tag == "ESP_NOW_CB"):
+		mac_addr = msg_list[msg_start:msg_start+6]
+		msg_start += 6
+		mac_addr_str = ":".join([f"{byte:02X}" for byte in mac_addr])
+		print(f"[{msg_tag}]", mac_addr_str, "\n	", msg_list[msg_start:])
 	else:
 		print(msg_tag, msg_list[msg_start:])
 

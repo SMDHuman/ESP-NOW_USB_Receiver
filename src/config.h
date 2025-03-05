@@ -4,9 +4,10 @@
 #include <Preferences.h>
 
 typedef struct {
+    uint8_t mac_address[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     uint32_t serial_baudrate = 115200;
     uint32_t serial_tx_package_size = 1024;
-    uint8_t mac_address[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    uint32_t serial_ack_timeout = 1000;
 } config_t;
 
 extern config_t config;
