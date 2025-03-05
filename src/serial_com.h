@@ -4,7 +4,6 @@
 #ifndef SERIAL_COM_H
 #define SERIAL_COM_H
 #include <Arduino.h>
-#include "esp_camera.h"
 #include "config.h"
 
 //-----------------------------------------------------------------------------
@@ -27,6 +26,9 @@ void serial_send_slip(uint8_t* buf, size_t len);
 void serial_send_slip(uint8_t data);
 void serial_send_debug(String text);
 void serial_send_debug(int number);
+void serial_send_custom(String tag, String text);
+void serial_send_custom(String tag, uint8_t number);
+void serial_send_custom(String tag, uint8_t* buf, size_t len);
 void serial_end_slip();
 
 //-----------------------------------------------------------------------------

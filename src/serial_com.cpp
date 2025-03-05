@@ -104,7 +104,31 @@ void serial_send_debug(String text){
   }
   serial_end_slip();
 }
-
+//-----------------------------------------------------------------------------
+// Send a custom message as a string using SLIP encoding
+void serial_send_custom(String tag, String text){
+  serial_send_slip_tag(tag);
+  for(size_t i = 0; i < text.length(); i++){
+    serial_send_slip(text[i]);
+  }
+  serial_end_slip();
+}
+//-----------------------------------------------------------------------------
+// Send a custom message as an char using SLIP encoding
+void serial_send_custom(String tag, uint8_t number){
+  serial_send_slip_tag(tag);
+  serial_send_slip(number);
+  serial_end_slip();
+}
+//-----------------------------------------------------------------------------
+// Send a custom message as a buffer using SLIP encoding
+void serial_send_custom(String tag, uint8_t *buf, size_t len){
+  serial_send_slip_tag(tag);
+  for(size_t i = 0; i < len; i++){
+    serial_send_slip(buf[i]);
+  }
+  serial_end_slip();
+}
 //-----------------------------------------------------------------------------
 // Send a debug message as an integer using SLIP encoding
 void serial_send_debug(int number){

@@ -15,7 +15,6 @@ class SerialCOM:
 			self.serial = Serial(port, baudrate)
 		else:
 			self.serial = Serial(baudrate = baudrate)
-		self.serial.flush()
 		#...
 		self.slip: SLIP = SLIP()
 		#...
@@ -67,6 +66,7 @@ class SerialCOM:
 	def open(self):
 		if(not self.is_open()):
 			self.serial.open()
+			self.serial.flush()
 	#--------------------------------------------------------------------------
 	#...
 	def send_slip_str(self, text: str) -> None:
@@ -110,7 +110,8 @@ class SerialCOM:
 			if(self.slip.ready):
 				pack = self.slip.get()
 				if(self.check_checksum(pack)):
-					self.receive_cb(pack[:-4])
+					if(self.receive_cb):
+						self.receive_cb(pack[:-4])
 			#...
 			elif(self.slip.wait_ack):
 				self.serial.write(self.slip.ESC_END)
@@ -123,7 +124,8 @@ class SerialCOM:
 						#print(chr(value), end = "")
 						self.slip.push(value)
 				except:
-					self.disconnected_cb()
+					if(self.disconnected_cb):
+						self.disconnected_cb()
 					self.serial.close()
 			time.sleep(0.000001)	
 	#--------------------------------------------------------------------------

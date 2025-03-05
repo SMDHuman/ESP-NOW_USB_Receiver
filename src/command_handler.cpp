@@ -28,7 +28,7 @@ uint8_t CMD_parse(uint8_t *msg_data, uint32_t len){
   uint8_t *payload = &msg_data[msg_start];
   // PING - Respond with PONG
   if(msg_tag == "PING"){
-    serial_send_debug("PONG");
+    serial_send_custom("PING_CB", "PONG");
   }
   // WRITE_CONFIG - Write the configuration to the memory [config]
   else if(msg_tag == "WRITE_CONFIG"){
